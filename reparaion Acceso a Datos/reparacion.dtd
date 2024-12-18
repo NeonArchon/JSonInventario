@@ -1,0 +1,11 @@
+<!ELEMENT inventario (productos)>
+<!ELEMENT productos (producto+)>
+<!ELEMENT producto (nombre, precio, fecha_ingreso, stock)>
+<!ELEMENT nombre (#PCDATA)>
+<!ELEMENT precio (#PCDATA)>
+<!ELEMENT fecha_ingreso (#PCDATA)>
+<!ELEMENT stock (#PCDATA)>
+<!ATTLIST producto 
+    codigo CDATA #REQUIRED
+    categoria CDATA #REQUIRED
+>
