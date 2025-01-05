@@ -8,6 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+
+import java.sql.*;
+
+
 public class Json {
 
     public static void leerJson() throws org.json.simple.parser.ParseException {
@@ -52,5 +56,87 @@ public class Json {
 
         }
 
-    }
+        private static void InsertarJson (JSONObject jsonObject){
+        //obtenemos los datos del JSon
+            JSONObject jsinventario = (JSONObject) jsonObject.get("inventario");
+            JSONObject jsproductos = (JSONObject) jsinventario.get("productos");
+            JSONArray japroducto = (JSONArray) jsproductos.get("producto");
 
+            // Conectar a la base de datos
+            try (Connection conn = Conexion.getConnection()) {
+                if (conn != null) {
+                    String query = "INSERT INTO productos (codigo, categoria, nombre, precio, fecha_ingreso, fstock) VALUES (?, ?, ?, ?, ?, ?)";
+                    PreparedStatement stmt = conn.prepareStatement(query);
+
+                    // Iterar sobre los productos y agregarlos a la base de datos
+                    for (Object pr : japroducto) {
+                        JSONObject p = (JSONObject) pr;
+
+                        stmt.setString(1, (String) p.get("-codigo"));
+                        stmt.setString(2, (String) p.get("-categoria"));
+                        stmt.setString(3, (String) p.get("nombre"));
+                        stmt.setInt(4, Integer.parseInt((String) p.get("precio"))); // Convertir precio a entero
+                        stmt.setDate(5, java.sql.Date.valueOf((String) p.get("fecha_ingreso"))); // Convertir fecha a java.sql.Date
+                        stmt.setInt(6, Integer.parseInt((String) p.get("stock"))); // Convertir stock a entero
+
+                        // Ejecutar la inserción
+                        stmt.executeUpdate();
+                    }
+                    System.out.println("Datos insertados correctamente en la base de datos.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public static void MostrarDatosDB(){
+
+            Connection conexion = null;
+            Statement statement = null;
+            ResultSet resultSet = null;
+
+            try {
+                // Obtén la conexión desde la clase Conexion
+                conexion = Conexion.getConnection();
+
+                // Crea un Statement para ejecutar la consulta
+                statement = conexion.createStatement();
+
+                // Ejecuta la consulta para obtener los datos de la tabla
+                String consulta = "SELECT * FROM productos";
+                resultSet = statement.executeQuery(consulta);
+
+                // Muestra los datos obtenidos
+                System.out.println("Datos en la base de datos:");
+                while (resultSet.next()) {
+                    String codigo = resultSet.getString("codigo");
+                    String categoria = resultSet.getString("categoria");
+                    String nombre = resultSet.getString("nombre");
+                    int precio = resultSet.getInt("precio");
+                    Date fechaIngreso = resultSet.getDate("fecha_ingreso");
+                    int stock = resultSet.getInt("fstock");
+
+                    System.out.println("----------------------------");
+                    System.out.println("Código: " + codigo);
+                    System.out.println("Categoría: " + categoria);
+                    System.out.println("Nombre: " + nombre);
+                    System.out.println("Precio: " + precio);
+                    System.out.println("Fecha de ingreso: " + fechaIngreso);
+                    System.out.println("Stock: " + stock);
+                }
+            } catch (Exception e) {
+                System.out.println("Error al obtener los datos: " + e.getMessage());
+            } finally {
+                // Cierra los recursos abiertos
+                try {
+                    if (resultSet != null) resultSet.close();
+                    if (statement != null) statement.close();
+                    if (conexion != null) conexion.close();
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+
+        }
+
+        }

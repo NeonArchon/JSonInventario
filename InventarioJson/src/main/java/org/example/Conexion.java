@@ -1,3 +1,5 @@
+package org.example;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -19,7 +21,7 @@ public class Conexion {
             conexion = DriverManager.getConnection(url, usuario, pass);
 
             if (conexion!=null){
-                System.out.println("Conexion Correcta");
+                System.out.println("org.example.Conexion Correcta");
             }
         } catch (Exception e) {
             System.out.println("No se pudo conectar "+e);
