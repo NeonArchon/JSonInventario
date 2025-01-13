@@ -2,7 +2,7 @@
 
 CREATE DATABASE inventariojson;
 
-SELECT inventariojson;
+USE inventariojson;
 
 CREATE TABLE productos (
 	codigo VARCHAR(20) PRIMARY KEY,
@@ -13,3 +13,4 @@ CREATE TABLE productos (
     fstock INT NOT NULL
 );
 
+SELECT * FROM productos;

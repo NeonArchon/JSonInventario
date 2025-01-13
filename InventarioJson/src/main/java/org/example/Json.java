@@ -14,9 +14,10 @@ import java.sql.*;
 
 public class Json {
 
+    //funion para leer el JSon
     public static void leerJson() throws org.json.simple.parser.ParseException {
         JSONParser parser = new JSONParser();
-        try (FileReader reader = new FileReader("C:\\Users\\morto\\IdeaProjects\\JSonInventario\\InventarioJson\\src\\main\\java\\org\\example\\inventario.json")) {
+        try (FileReader reader = new FileReader("src/main/java/org/example/inventario.json")) {
             Object obj = parser.parse(reader);
             JSONObject arrayiventario = (JSONObject) obj;
 
@@ -31,6 +32,7 @@ public class Json {
         }
     }
 
+    //Funcion para mostrar el JSon
         private static void mostrarJson (JSONObject jsonobject){
             System.out.println("**************");
             JSONObject jsinventario = (JSONObject) jsonobject.get("inventario");
@@ -56,7 +58,8 @@ public class Json {
 
         }
 
-        private static void InsertarJson (JSONObject jsonObject){
+        //Funcion para insertar el JSON a la Base de datos
+        public static void InsertarJsonDB(JSONObject jsonObject){
         //obtenemos los datos del JSon
             JSONObject jsinventario = (JSONObject) jsonObject.get("inventario");
             JSONObject jsproductos = (JSONObject) jsinventario.get("productos");
@@ -75,7 +78,8 @@ public class Json {
                         stmt.setString(1, (String) p.get("-codigo"));
                         stmt.setString(2, (String) p.get("-categoria"));
                         stmt.setString(3, (String) p.get("nombre"));
-                        stmt.setInt(4, Integer.parseInt((String) p.get("precio"))); // Convertir precio a entero
+                        stmt.setString(4, (String) p.get("precio"));
+                     //stmt.setInt(4, Integer.parseInt((String) p.get("precio"))); // Convertir precio a entero
                         stmt.setDate(5, java.sql.Date.valueOf((String) p.get("fecha_ingreso"))); // Convertir fecha a java.sql.Date
                         stmt.setInt(6, Integer.parseInt((String) p.get("stock"))); // Convertir stock a entero
 
@@ -89,6 +93,7 @@ public class Json {
             }
         }
 
+        //Funcion para mostrar los datos guardados en la base de datos
         public static void MostrarDatosDB(){
 
             Connection conexion = null;
