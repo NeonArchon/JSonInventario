@@ -29,7 +29,7 @@ public class Main {
             // Leer y procesar el archivo JSON
             System.out.println("\nLeyendo el archivo JSON...");
             JSONParser parser = new JSONParser();
-            FileReader reader = new FileReader("src/main/java/org/example/inventario.json");
+            FileReader reader = new FileReader("InventarioJson/src/main/java/org/example/inventario.json");
             Object obj = parser.parse(reader);
             JSONObject arrayInventario = (JSONObject) obj;
 

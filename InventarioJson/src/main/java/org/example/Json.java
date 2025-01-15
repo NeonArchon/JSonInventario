@@ -17,7 +17,7 @@ public class Json {
     //funion para leer el JSon
     public static void leerJson() throws org.json.simple.parser.ParseException {
         JSONParser parser = new JSONParser();
-        try (FileReader reader = new FileReader("src/main/java/org/example/inventario.json")) {
+        try (FileReader reader = new FileReader("InventarioJson/src/main/java/org/example/inventario.json")) {
             Object obj = parser.parse(reader);
             JSONObject arrayiventario = (JSONObject) obj;
 
